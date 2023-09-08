@@ -1,6 +1,9 @@
 package iotbase
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 type ICommunication interface {
 	Start() error
@@ -13,6 +16,7 @@ type ProtocolBase struct {
 }
 
 func GetRandom() int {
+	rand.Seed(time.Now().Unix())
 	rn := 10
 	return rand.Intn(rn)
 }
