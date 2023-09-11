@@ -47,16 +47,20 @@ func ToSyncType(typeValue int) string {
 	}
 }
 
+/* 物模型结构体定义最早Json都是首字母大写
+后来的版本新增了一些字段，有很多小写开头
+不太统一 -Syg*/
+
 type EnumDataSpec struct {
 	Value string `json:"value"`
 	Desc  string `json:"desc"`
 }
 
 type DataTypeSpec struct {
-	Min      int            `json:"min"`
-	Max      int            `json:"max"`
-	Step     string         `json:"step"`
-	UnitName string         `json:"unitName"`
+	Min      int            `json:"Min"`
+	Max      int            `json:"Max"`
+	Step     string         `json:"Step"`
+	UnitName string         `json:"UnitName"`
 	Length   int            `json:"length"`
 	Bool0    string         `json:"bool0"`
 	Bool1    string         `json:"bool1"`
@@ -64,45 +68,45 @@ type DataTypeSpec struct {
 }
 
 type ModelDataType struct {
-	Type string       `json:"type"`
-	Spec DataTypeSpec `json:"spec"`
+	Type string       `json:"Type"`
+	Spec DataTypeSpec `json:"Spec"`
 }
 
 type ModelParam struct {
-	Identifier string        `json:"identifier"`
-	Name       string        `json:"name"`
-	DataType   ModelDataType `json:"dataType"`
+	Identifier string        `json:"Identifier"`
+	Name       string        `json:"Name"`
+	DataType   ModelDataType `json:"DataType"`
 }
 
 type ModelProperty struct {
-	Id          string        `json:"id"`
-	Identifier  string        `json:"identifier"`
-	Name        string        `json:"name"`
-	AccessMode  string        `json:"accessMode"`
-	Description string        `json:"description"`
-	DataType    ModelDataType `json:"dataType"`
+	Id          string        `json:"Id"`
+	Identifier  string        `json:"Identifier"`
+	Name        string        `json:"Name"`
+	AccessMode  string        `json:"AccessMode"`
+	Description string        `json:"Description"`
+	DataType    ModelDataType `json:"DataType"`
 }
 
 type ModelEvent struct {
-	Id           string       `json:"id"`
-	Identifier   string       `json:"identifier"`
-	Name         string       `json:"name"`
-	EventType    string       `json:"eventType"`
-	OutputParams []ModelParam `json:"outputParams"`
+	Id           string       `json:"Id"`
+	Identifier   string       `json:"Identifier"`
+	Name         string       `json:"Name"`
+	EventType    string       `json:"EventType"`
+	OutputParams []ModelParam `json:"OutputParams"`
 }
 
 type ModelCommand struct {
-	Id           string       `json:"id"`
-	Identifier   string       `json:"identifier"`
-	Name         string       `json:"name"`
+	Id           string       `json:"Id"`
+	Identifier   string       `json:"Identifier"`
+	Name         string       `json:"Name"`
 	CommandType  string       `json:"commandType"`
-	Description  string       `json:"description"`
-	InputParams  []ModelParam `json:"inputParams"`
-	OutputParams []ModelParam `json:"outputParams"`
+	Description  string       `json:"Description"`
+	InputParams  []ModelParam `json:"InputParams"`
+	OutputParams []ModelParam `json:"OutputParams"`
 }
 
 type ModelAriot struct {
-	Properties []ModelProperty
-	Events     []ModelEvent
-	Commands   []ModelCommand
+	Properties []ModelProperty `json:"Property"`
+	Events     []ModelEvent    `json:"Event"`
+	Commands   []ModelCommand  `json:"Command"`
 }
