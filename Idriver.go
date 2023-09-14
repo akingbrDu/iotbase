@@ -1,12 +1,14 @@
 package iotbase
 
+import "github.com/akingbrDu/iotbase/core"
+
 type IDriver interface {
 	// Init 	 *
 	//@brief: init
 	//	 * @param: configJson: 配置参数
 	//	 * @param: modelJson: 物模型参数
 	//	 * @return:   错误码
-	Init(device Device, configJson string, modelJson string, handler IEventHandler) error
+	Init(device core.Device, configJson string, modelJson string, handler IEventHandler) error
 
 	//// Query  *
 	////@brief: start
@@ -24,7 +26,7 @@ type IDriver interface {
 	//@brief: execute command
 	//	 * @param: cmd: 命令结构
 	//	 * @return:   错误码
-	ExeCommand(cmd Command) error
+	ExeCommand(cmd core.Command) error
 
 	// SetOption  *
 	//@brief: set option

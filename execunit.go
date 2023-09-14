@@ -1,5 +1,7 @@
 package iotbase
 
+import "github.com/akingbrDu/iotbase/core"
+
 // 驱动执行单元
 // 执行单元调度类型
 const (
@@ -18,5 +20,5 @@ type ExecUnit struct {
 	RunMode int
 	Freq    int
 	Sender  ICommunicator
-	CmdSet  []InstrCommand
+	CmdSet  []core.InstrCommand
 }

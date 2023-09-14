@@ -1,4 +1,4 @@
-package iotbase
+package core
 
 const (
 	INT32  = "int32"

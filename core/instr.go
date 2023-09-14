@@ -1,4 +1,4 @@
-package iotbase
+package core
 
 type IInstrResultParser interface {
 	parseContent(interface{}) map[string]interface{}

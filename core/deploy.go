@@ -1,4 +1,4 @@
-package iotbase
+package core
 
 import "encoding/json"
 

@@ -1,4 +1,4 @@
-package iotbase
+package core
 
 const (
 	ModBusRTU   string = "ModbusRTU"

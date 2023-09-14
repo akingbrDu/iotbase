@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/akingbrDu/iotbase/core"
 )
 
 type GenericDriver struct {
@@ -28,7 +29,7 @@ func (drv *GenericDriver) parseRawMessage(rawMessage *json.RawMessage) (map[stri
 
 // Init  因为Go支持组合，对abstract继承的支持不是很好，所以所有Hook接口
 // 都统一放到base包的最下层
-func (drv *GenericDriver) Init(device Device, configJson string, modelJson string, handler IEventHandler) error {
+func (drv *GenericDriver) Init(device core.Device, configJson string, modelJson string, handler IEventHandler) error {
 	if drv.initParamHook != nil {
 		if err := drv.initParamHook.onParamBefore(); err != nil {
 			return err

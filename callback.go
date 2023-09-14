@@ -1,5 +1,7 @@
 package iotbase
 
+import "github.com/akingbrDu/iotbase/core"
+
 type DbgInformation struct {
 	FileName   string
 	MethodName string
@@ -8,9 +10,9 @@ type DbgInformation struct {
 }
 
 type IEventHandler interface {
-	onError(warn Warn)
-	onProperty(property Property)
-	onProperties(properties []Property)
-	onStatus(status Status)
-	onCommandReply(reply CommandReply)
+	onError(warn core.Warn)
+	onProperty(property core.Property)
+	onProperties(properties []core.Property)
+	onStatus(status core.Status)
+	onCommandReply(reply core.CommandReply)
 }
