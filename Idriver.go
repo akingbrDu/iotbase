@@ -6,19 +6,19 @@ type IDriver interface {
 	//	 * @param: configJson: 配置参数
 	//	 * @param: modelJson: 物模型参数
 	//	 * @return:   错误码
-	Init(configJson string, modelJson string) error
+	Init(device Device, configJson string, modelJson string, handler IEventHandler) error
 
-	// Query  *
-	//@brief: start
-	//	 * @param:
-	//	 * @return:   字节流 错误码
-	Query() ([]byte, error)
-
-	// Process  *
-	//@brief: process
-	//	 * @param: data: 字节流
-	//	 * @return:   上报数据, 错误码
-	Process(data []byte) (string, error)
+	//// Query  *
+	////@brief: start
+	////	 * @param:
+	////	 * @return:   字节流 错误码
+	//Query() ([]byte, error)
+	//
+	//// Process  *
+	////@brief: process
+	////	 * @param: data: 字节流
+	////	 * @return:   上报数据, 错误码
+	//Process(data []byte) (string, error)
 
 	// ExeCommand  *
 	//@brief: execute command
@@ -32,4 +32,16 @@ type IDriver interface {
 	//	 * @param: value: 值
 	//	 * @return:   错误码
 	SetOption(key string, value string) error
+}
+
+// IParamParseHook  初始化解析钩子
+type IParamParseHook interface {
+	// onParamBefore  *初始化解析参数前的钩子
+	onParamBefore() error
+	// onParamParsed  *初始化解析参数后的钩子
+	onParamParsed() error
+	// onCreateDefaultCommunicator 创建默认通讯器
+	onCreateDefaultCommunicator() (ICommunicator, error)
+	// onCreateExecUnits 创建执行单元
+	onCreateExecUnits(units []ExecUnit) error
 }

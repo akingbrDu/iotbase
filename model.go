@@ -57,8 +57,8 @@ type EnumDataSpec struct {
 }
 
 type DataTypeSpec struct {
-	Min      int            `json:"Min"`
-	Max      int            `json:"Max"`
+	Min      string         `json:"Min"`
+	Max      string         `json:"Max"`
 	Step     string         `json:"Step"`
 	UnitName string         `json:"UnitName"`
 	Length   int            `json:"length"`
@@ -82,7 +82,7 @@ type ModelProperty struct {
 	Id          string        `json:"Id"`
 	Identifier  string        `json:"Identifier"`
 	Name        string        `json:"Name"`
-	AccessMode  string        `json:"AccessMode"`
+	AccessMode  int           `json:"AccessMode"`
 	Description string        `json:"Description"`
 	DataType    ModelDataType `json:"DataType"`
 }

@@ -8,5 +8,9 @@ type DbgInformation struct {
 }
 
 type IEventHandler interface {
-	onError(msg string, detail DbgInformation)
+	onError(warn Warn)
+	onProperty(property Property)
+	onProperties(properties []Property)
+	onStatus(status Status)
+	onCommandReply(reply CommandReply)
 }
