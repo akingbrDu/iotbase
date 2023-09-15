@@ -61,3 +61,7 @@ type DeviceWarn struct {
 	Identifier string         `json:"identifier"`
 	ParamList  []WarningParam `json:"paramList"`
 }
+
+// IErrorHandler 定义处理器
+type IErrorHandler interface {
+}

@@ -9,7 +9,13 @@ import (
 
 type GenericDriver struct {
 	BaseDriver
-	freq int
+	freq               int
+	runtimeInfo        map[string]interface{}
+	cmuType            string
+	cmuParamInfo       map[string]interface{}
+	protoType          string
+	protoParamInfo     map[string]interface{}
+	defSharedScheduler core.IScheduler
 }
 
 func (drv *GenericDriver) parseRawMessage(rawMessage *json.RawMessage) (map[string]interface{}, error) {
@@ -28,10 +34,10 @@ func (drv *GenericDriver) parseRawMessage(rawMessage *json.RawMessage) (map[stri
 }
 
 // Init  因为Go支持组合，对abstract继承的支持不是很好，所以所有Hook接口
-// 都统一放到base包的最下层
-func (drv *GenericDriver) Init(device core.Device, configJson string, modelJson string, handler IEventHandler) error {
+// 都统一放到Generic实现的最下面
+func (drv *GenericDriver) Init(device core.Device, configJson string, modelJson string, handler core.IEventHandler) error {
 	if drv.initParamHook != nil {
-		if err := drv.initParamHook.onParamBefore(); err != nil {
+		if err := drv.initParamHook.OnBefInitialize(); err != nil {
 			return err
 		}
 	}
@@ -47,9 +53,15 @@ func (drv *GenericDriver) Init(device core.Device, configJson string, modelJson 
 		return err
 	}
 
-	commuParamInfo, err := drv.parseRawMessage(&drv.deploy.Communication.Param)
+	cmuParamInfo, err := drv.parseRawMessage(&drv.deploy.Communication.Param)
 	if err != nil {
 		fmt.Println("fail to decode communication param field in json with err: :", err)
+		return err
+	}
+
+	protoParamInfo, err := drv.parseRawMessage(&drv.deploy.Proto.Param)
+	if err != nil {
+		fmt.Println("fail to decode proto param field in json with err: :", err)
 		return err
 	}
 
@@ -58,69 +70,34 @@ func (drv *GenericDriver) Init(device core.Device, configJson string, modelJson 
 		fmt.Println("can't parse freq field in json\"")
 		return errors.New("can't parse freq field in json")
 	}
+
+	//解析一些常用的字段
+	drv.runtimeInfo = runtimeInfo
+	drv.cmuParamInfo = cmuParamInfo
+	drv.cmuType = drv.deploy.Communication.Type
+	drv.protoParamInfo = protoParamInfo
+	drv.protoType = drv.deploy.Proto.Type
 	drv.freq = freq
 
+	drv.CreateScheduler()
+
 	if drv.initParamHook != nil {
-		if err := drv.initParamHook.onParamParsed(); err != nil {
+		if err := drv.initParamHook.OnInitialized(); err != nil {
 			return err
 		}
-	}
-
-	defCommunicator, err := drv.createCommunicator(drv.deploy.Communication.Type, commuParamInfo)
-	if err != nil {
-		fmt.Println("fail to create communicator with err: :", err)
-		return err
-	}
-
-	//创建驱动执行单元
-	units, err := drv.createExecUnits(defCommunicator)
-	if err != nil {
-		return err
-	}
-
-	//分配调度
-	err = drv.schedule(units)
-	if err != nil {
-		return err
 	}
 
 	return nil
 }
 
-func (drv *GenericDriver) createCommunicator(cType string, param map[string]interface{}) (ICommunicator, error) {
-	if drv.initParamHook != nil {
-		if communicator, err := drv.initParamHook.onCreateDefaultCommunicator(); err != nil {
-			return nil, err
-		} else if communicator != nil {
-			return communicator, nil
-		}
-	} else {
-		//create default	waiting..
-	}
-	return nil, nil
+func (drv *GenericDriver) CreateScheduler() {
+	drv.defSharedScheduler = &core.DefaultSharedScheduler{}
 }
 
-func (drv *GenericDriver) createExecUnits(defCommunicator ICommunicator) ([]ExecUnit, error) {
-	var units []ExecUnit
-	if drv.initParamHook != nil {
-		if err := drv.initParamHook.onCreateExecUnits(units); err != nil {
-			return nil, err
-		}
-
-		//如果不自定义通讯器，则使用默认通讯器
-		for _, unit := range units {
-			if unit.Sender == nil {
-				unit.Sender = defCommunicator
-			}
-
-			if unit.RunType == Query && unit.Freq <= 0 {
-				unit.Freq = drv.freq
-			}
-		}
+func (drv *GenericDriver) Run() error {
+	err := drv.defSharedScheduler.Run()
+	if err != nil {
+		return err
 	}
-	return units, nil
-}
-
-func (drv *GenericDriver) schedule(units []ExecUnit) error {
 	return nil
 }

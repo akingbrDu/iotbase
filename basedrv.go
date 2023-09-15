@@ -9,11 +9,11 @@ type BaseDriver struct {
 	device        core.Device
 	model         core.ModelAriot
 	deploy        core.DeployAriot
-	handler       IEventHandler
-	initParamHook IParamParseHook
+	handler       core.IEventHandler
+	initParamHook core.IInitHook
 }
 
-func (drv *BaseDriver) Init(device core.Device, configJson string, modelJson string, handler IEventHandler) error {
+func (drv *BaseDriver) Init(device core.Device, configJson string, modelJson string, handler core.IEventHandler) error {
 	drv.handler = handler
 	drv.device = device
 
@@ -32,30 +32,30 @@ func (drv *BaseDriver) Init(device core.Device, configJson string, modelJson str
 
 func (drv *BaseDriver) emitStatus(status core.Status) {
 	if drv.handler != nil {
-		drv.handler.onStatus(status)
+		drv.handler.OnStatus(status)
 	}
 }
 
 func (drv *BaseDriver) emitError(warn core.Warn) {
 	if drv.handler != nil {
-		drv.handler.onError(warn)
+		drv.handler.OnError(warn)
 	}
 }
 
 func (drv *BaseDriver) emitProperty(property core.Property) {
 	if drv.handler != nil {
-		drv.handler.onProperty(property)
+		drv.handler.OnProperty(property)
 	}
 }
 
 func (drv *BaseDriver) emitProperties(properties []core.Property) {
 	if drv.handler != nil {
-		drv.handler.onProperties(properties)
+		drv.handler.OnProperties(properties)
 	}
 }
 
 func (drv *BaseDriver) emitCommandReply(reply core.CommandReply) {
 	if drv.handler != nil {
-		drv.handler.onCommandReply(reply)
+		drv.handler.OnCommandReply(reply)
 	}
 }

@@ -1,19 +1,34 @@
 package core
 
-type IInstrResultParser interface {
-	parseContent(interface{}) map[string]interface{}
+//type IInstrResultParser interface {
+//	ParseContent(interface{}) map[string]interface{}
+//}
+
+type IInstrCommand interface {
+	CheckIfFinished() bool
+	Parse() map[string]interface{}
 }
 
-type InstrCommand struct {
-	parser IInstrResultParser
+type BaseInstrCommand struct {
+	//Parser IInstrResultParser
 }
 
 type BinaryInstrCommand struct {
-	InstrCommand
-	data []byte
+	BaseInstrCommand
+	OutData      []byte
+	IncomingData []byte
+}
+
+func (cmd *BinaryInstrCommand) checkIfFinished() bool {
+	return true
 }
 
 type StringInstrCommand struct {
-	InstrCommand
-	data string
+	BaseInstrCommand
+	OutData      string
+	IncomingData string
+}
+
+func (cmd *StringInstrCommand) checkIfFinished() bool {
+	return true
 }
